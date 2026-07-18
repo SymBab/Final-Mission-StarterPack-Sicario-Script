@@ -5,8 +5,11 @@
 from data import family_members
 
 def show_members():
+    for member in family_members:
+        print(f"name: {member["name"]} role: {member["role"]} power: {member["power"]} equipment: {member["equipment"]}")
 #   - print ข้อมูลลูกน้องทุกคนใน family_members บรรทัดละคน (ชื่อ, ตำแหน่ง, ความโหด, อาวุธ)
     # TODO: เขียนโค้ดตรงนี้
+
     pass
 
 
