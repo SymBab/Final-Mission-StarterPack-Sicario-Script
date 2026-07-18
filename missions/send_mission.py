@@ -9,7 +9,16 @@ def send_mission(person):
 #   - ไม่ถึงเกณฑ์ -> return {"status": False, "reward": 0}
 #   (การลบคนที่ตาย main.py จัดการเอง)
     # TODO: เขียนโค้ดตรงนี้
-    pass
+    if person["power"] >= 7 :
+        person["money"] += 300000
+        person["status"] = True
+        person["reward"] = 300000
+        return person
+        
+    else:
+        person["status"] = False
+        person["reward"] = 0  
+        return person  
 
 
 # ทดสอบเฉพาะไฟล์ตัวเอง: พิมพ์  python -m missions.send_mission
