@@ -8,7 +8,7 @@
 from data import weapons_catalog
 from personnel.add_member import add_member
 from personnel.show_members import show_members
-from personnel.search_member import search_member
+from search_member import search_member
 from personnel.remove_member import remove_member
 from weapon_shop.show_catalog import show_catalog
 from weapon_shop.equip_item import equip_item
@@ -52,32 +52,55 @@ def main():
             print("\n--- ค้นหาประวัติ ---")
             # TODO:
             # 1) รับชื่อที่ต้องการค้นหาด้วย input()
+            name = input("name : ")
             # 2) เรียก search_member(ชื่อ) แล้วเก็บผลไว้ในตัวแปร
+            new_name=search_member(name)
             # 3) ถ้าผลไม่ใช่ None -> print ข้อมูล (ชื่อ, ตำแหน่ง, เงิน, อาวุธ)
+            if new_name is not None:
+                print(f" name : {new_name["name"]} role : {new_name["role"]} money : {new_name["money"]} weapon : {new_name["equipment"]}")
             #    ถ้าเป็น None    -> print "ไม่พบชื่อในระบบ"
-            print("!! เมนูนี้ยังไม่ถูกเชื่อม")
+            else:
+                print("ไม่พบชื่อในระบบ")
 
         # ---------- เมนู 4 (TODO) ----------
         elif choice == '4':
             print("\n--- สั่งเก็บลูกน้อง ---")
             # TODO:
             # 1) รับชื่อคนที่ต้องการลบด้วย input()
+            name = input("name : ")
             # 2) เรียก remove_member(ชื่อ) แล้วเก็บผลไว้ (ได้ True หรือ False)
+            rm_member=remove_member(name)
             # 3) True  -> print สั่งเก็บเรียบร้อย
+            if rm_member == True :
+                print(f"สั่งเก็บให้เรียบร้อย")
             #    False -> print "ไม่พบชื่อในระบบ"
-            print("!! เมนูนี้ยังไม่ถูกเชื่อม")
+            else:
+                print(f"!! เมนูนี้ยังไม่ถูกเชื่อม")
 
         # ---------- เมนู 5 (TODO) ----------
         elif choice == '5':
             print("\n=== คลังอาวุธ ===")
             # TODO:
             # 1) เรียก show_catalog() แสดงรายการอาวุธ
+            show_catalog()
             # 2) รับรหัสอาวุธ แล้วหาอาวุธด้วย weapons_catalog.get(รหัส)
             #    (.get(key) เหมือน dict[key] แต่ถ้าไม่มี key นี้จะได้ None แทนที่จะ error)
             #    ถ้าได้ None -> print "ไม่มีสินค้านี้ในระบบ" (จบเมนูนี้เลย)
+            select_weapon = int(input("select_weapon 1,2,3,None: "))
             # 3) รับชื่อลูกน้อง แล้วหาคนด้วย search_member(ชื่อ)
+            num_weapon=search_member(select_weapon)
             #    ถ้าได้ None -> print "ไม่พบรายชื่อลูกน้องคนนี้" (จบเมนูนี้เลย)
+            if select_weapon=="None":
+                print("ไม่พบรายชื่อลูกน้องคนนี้")
             # 4) เรียก equip_item(คน, อาวุธ) แล้วเก็บผลไว้ (ได้ dict)
+            result = equip_item(new_member,select_weapon)
+            print(result["message"])
+            if result["status"]==True:
+                print(f"ค่าพลังใหม่ของ {new_name["name"]} : {new_name["power"]}")
+            
+            
+            
+            
             #    print ผล["message"]
             #    และถ้าผล["status"] เป็น True -> print ค่าพลังใหม่ของคนนั้น
             print("!! เมนูนี้ยังไม่ถูกเชื่อม")
@@ -87,11 +110,21 @@ def main():
             print("\n--- ส่งไปทำภารกิจ ---")
             # TODO:
             # 1) รับชื่อลูกน้อง แล้วหาคนด้วย search_member(ชื่อ)
+            name = input("name luknong : ")
+            new_name = search_member(name)
             #    ถ้าได้ None -> print "ไม่พบรายชื่อลูกน้องคนนี้ในระบบ" (จบเมนูนี้เลย)
+            if new_name is None :
+                print(f"ไม่พบรายชื่อลูกน้องคนนี้ในระบบ")
             # 2) เรียก send_mission(คน) แล้วเก็บผลไว้ (ได้ dict)
+            else :
+                result=send_mission(new_name)
             # 3) ถ้าผล["status"] เป็น True -> print ภารกิจสำเร็จ + เงินรางวัล + ยอดเงินปัจจุบัน
+                if result["status"]==True:
+                    print(f"ภารกิจสำเร็จ เงินรางวัล {result["reward"]} บาท ยอดเงินปุัจจุบัน {result["money"]}")
+                else:
+                    remove_member(new_name["name"])
+                    print(f"ภารกิจล้มเหลว ถูกลบออกจากแฟมิลี่")
             #    ถ้าเป็น False -> เรียก remove_member(คน["name"]) แล้ว print ภารกิจล้มเหลว ถูกลบออกจากแฟมิลี่
-            print("!! เมนูนี้ยังไม่ถูกเชื่อม")
 
         elif choice == '7':
             print("ปิดระบบ...")
